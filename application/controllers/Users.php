@@ -58,8 +58,54 @@ class Users extends MY_Controller {
     echo json_encode($validator);
   }
 
-	public function index()
+	public function login()
 	{
-		$this->load->view('welcome_message');
+    $validator = array('success' => false, 'messages'=> array());
+
+    $validate_data = array(
+      array(
+        'field' => 'username',
+        'label' => 'Username',
+        'rules' => 'required|callback_validate_username'
+      ),
+      array(
+        'field' => 'password',
+        'label' => 'Password',
+        'rules' => 'required'
+      )
+    );
+
+    $this->form_validation->set_rules($validate_data);
+    $this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
+
+    if($this->form_validation->run() === true){
+      $login = $this->users_model->login();
+
+      if($login){
+        $validator['success'] = true;
+        $validator['messages'] = 'Successfully LoggedIn';
+      }else{
+        $validator['success'] = false;
+        $validator['messages'] = 'Incorrect Password';
+      }
+    }else{
+      $validator['success'] = false;
+      foreach ($_POST as $key => $value) {
+        $validator['messages'][$key] = form_error($key);
+      }
+    }
+
+    echo json_encode($validator);
 	}
+
+  public function validate_username(){
+    $username = $this->users_model->validate_username();
+    if($username === true){
+      return true;
+    }else{
+      $this->form_validation->set_message('validate_username', 'The {field} does not exist');
+      return false;
+    }
+  }
+
 }
