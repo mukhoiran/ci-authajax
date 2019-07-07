@@ -83,4 +83,64 @@ class Users_model extends CI_Model {
       return $result;
     }
   }
+
+  public function usernameExists($userId = null)
+  {
+    if($userId) {
+      $sql = "SELECT * FROM users WHERE username = ? AND id != ?";
+      $query = $this->db->query($sql, array($this->input->post('username'), $userId));
+      return ($query->num_rows() >= 1) ? true : false;
+    }
+  }
+
+  public function getUserDataById($userId) {
+    $sql = "SELECT * FROM users WHERE id = ?";
+    $query = $this->db->query($sql, array($userId));
+    return $query->row_array();
+  }
+
+  public function validCurrentPassword($userId = null)
+  {
+    if($userId) {
+
+      $getUserDataById = $this->getUserDataById($userId);
+      $salt = $getUserDataById['salt'];
+      $currentPassword = $this->makePassword($this->input->post('currentPassword'), $salt);
+
+      return ($currentPassword == $getUserDataById['password']) ? true : false;
+    }
+  }
+
+  public function update($userId)
+  {
+    if($userId) {
+      $update_data = array(
+        'username' => $this->input->post('username'),
+        'name' => $this->input->post('fullName'),
+        'contact' => $this->input->post('contact'),
+      );
+
+      $this->db->where('id', $userId);
+      $query = $this->db->update('users', $update_data);
+
+      return ($query === true) ? true : false;
+    }
+  }
+
+  public function changepassword($userId)
+	{
+		$salt = $this->salt();
+
+		$password = $this->makePassword($this->input->post('password'), $salt);
+
+		$update_data = array(
+			'password' => $password,
+			'salt' => $salt
+		);
+
+		$this->db->where('id', $userId);
+		$query = $this->db->update('users', $update_data);
+		return ($query === true) ? true : false;
+	}
+
 }
