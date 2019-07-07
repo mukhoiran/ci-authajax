@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pages extends CI_Controller {
+class Pages extends MY_Controller {
 
 	public function index($page = 'login')
 	{
@@ -10,6 +10,21 @@ class Pages extends CI_Controller {
     }
 
     $data['title'] = ucfirst($page);
+
+		if($page == 'login') {
+			$this->loggedIn();
+		} else if($page == 'register') {
+			$this->loggedRegisterIn();
+		}
+		else {
+			$this->notLoggedIn();
+
+			// $this->load->library('session');
+			//
+			// $this->load->model('users_model');
+
+			// $data['userData'] = $this->model_users->fetchUserData($this->session->userdata('user_id'));
+		}
 
 		$this->load->view($page, $data);
 	}
