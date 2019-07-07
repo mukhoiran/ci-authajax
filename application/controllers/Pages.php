@@ -11,7 +11,7 @@ class Pages extends MY_Controller {
 
     $data['title'] = ucfirst($page);
 
-		if($page == 'login' || $page == 'register') {
+		if($page == 'login') {
 			$this->loggedIn();
 		} else if($page == 'register') {
 			$this->loggedRegisterIn();
