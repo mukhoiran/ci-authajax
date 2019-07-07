@@ -19,11 +19,11 @@ class Pages extends MY_Controller {
 		else {
 			$this->notLoggedIn();
 
-			// $this->load->library('session');
-			//
-			// $this->load->model('users_model');
+			$this->load->library('session');
 
-			// $data['userData'] = $this->model_users->fetchUserData($this->session->userdata('user_id'));
+			$this->load->model('users_model');
+
+			$data['userData'] = $this->users_model->fetchUserData($this->session->userdata('user_id'));
 		}
 
 		$this->load->view($page, $data);

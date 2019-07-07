@@ -72,4 +72,15 @@ class Users_model extends CI_Model {
       return false;
     } // /else
   }
+
+  public function fetchUserData($userId = null)
+  {
+    if($userId) {
+      $sql = "SELECT * FROM users WHERE id = ?";
+      $query = $this->db->query($sql, array($userId));
+      $result = $query->row_array();
+
+      return $result;
+    }
+  }
 }
