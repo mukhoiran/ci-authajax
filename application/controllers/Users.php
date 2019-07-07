@@ -66,7 +66,7 @@ class Users extends MY_Controller {
       array(
         'field' => 'username',
         'label' => 'Username',
-        'rules' => 'required|callback_validate_username'
+        'rules' => 'callback_validate_username|required'
       ),
       array(
         'field' => 'password',
@@ -79,11 +79,21 @@ class Users extends MY_Controller {
     $this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
 
     if($this->form_validation->run() === true){
+
       $login = $this->users_model->login();
 
       if($login){
+        $this->load->library('session');
+
+        $newdata = array(
+          'user_id'  => $login,
+          'logged_in' => TRUE
+        );
+
+        $this->session->set_userdata($newdata);
+
         $validator['success'] = true;
-        $validator['messages'] = 'Successfully LoggedIn';
+        $validator['messages'] = 'index.php/dashboard';
       }else{
         $validator['success'] = false;
         $validator['messages'] = 'Incorrect Password';
@@ -103,7 +113,7 @@ class Users extends MY_Controller {
     if($username === true){
       return true;
     }else{
-      $this->form_validation->set_message('validate_username', 'The {field} does not exist');
+        $this->form_validation->set_message('validate_username', 'The {field} does not exist');
       return false;
     }
   }

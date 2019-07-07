@@ -14,6 +14,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">Login</div>
           <div class="panel-body">
+            <div id="messages"></div>
             <form action="users/login" method="post" id="loginForm">
              <div class="form-group">
                <label for="username">Username</label>
