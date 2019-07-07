@@ -14,7 +14,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">Register</div>
           <div class="panel-body">
-            <form action="/users/register">
+            <form action="users/register" method="POST">
              <div class="form-group">
                <label for="username">Username</label>
                <input type="text" class="form-control" id="username" name="username" placeholder="Username">
@@ -25,7 +25,7 @@
              </div>
              <div class="form-group">
                <label for="passwordAgain">Password Again</label>
-               <input type="email" class="form-control" id="passwordAgain" name="passwordAgain" placeholder="Password Again">
+               <input type="password" class="form-control" id="passwordAgain" name="passwordAgain" placeholder="Password Again">
              </div>
              <div class="form-group">
                <label for="fullName">Name</label>
